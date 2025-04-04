@@ -20,7 +20,7 @@ function AllDocumentsPage() {
     if (categoryParam) {
       setActiveCategory(categoryParam);
     } else if (!searchParam) {
-      setActiveCategory('All Documents');
+      setActiveCategory('Alle Handleidingen');
     }
   }, [categoryParam, searchParam]);
   
@@ -29,8 +29,8 @@ function AllDocumentsPage() {
     let filtered = documents;
     
     // Apply category filter if not searching or if both search and category are specified
-    if ((!searchParam && activeCategory !== 'All Documents') || 
-        (searchParam && categoryParam && activeCategory !== 'All Documents')) {
+    if ((!searchParam && activeCategory !== 'Alle Handleidingen') || 
+        (searchParam && categoryParam && activeCategory !== 'Alle Handleidingen')) {
       filtered = filtered.filter(doc => doc.category === activeCategory);
     }
     
@@ -49,15 +49,15 @@ function AllDocumentsPage() {
   
   // Determine page title
   const pageTitle = searchParam && searchParam.trim() !== ''
-    ? `Search Results for "${searchParam}"` 
-    : `${activeCategory === 'All Documents' ? 'All' : activeCategory} Documents`;
+    ? `Zoekresultaten voor "${searchParam}"` 
+    : `${activeCategory === 'Alle Handleidingen' ? 'All' : activeCategory} Handleidingen`;
   
   return (
     <>
       <Header />
       <main className="container" style={{ marginTop: '40px' }}>
         <Link to="/" className="card-link" style={{ marginBottom: '20px', display: 'inline-block' }}>
-          <span>← Back to Home</span>
+          <span>← Terug naar Home</span>
         </Link>
         
         <SectionTitle title={pageTitle} />
@@ -65,7 +65,7 @@ function AllDocumentsPage() {
         {searchResults.length > 0 ? (
           <DocumentGrid documents={searchResults} />
         ) : (
-          <p>No documents found. Try a different search term or category.</p>
+          <p>Geen handleidingen gevonden. Probeer een andere zoekterm of categorie.</p>
         )}
       </main>
       <Footer />

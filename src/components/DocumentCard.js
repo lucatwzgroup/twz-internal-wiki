@@ -10,7 +10,7 @@ function DocumentCard({ document }) {
         <span className={`card-category ${category.toLowerCase()}`}>{category}</span>
         <h3>{title}</h3>
         <p>{description}</p>
-        <a href={link} className="card-link">Open Document <span>→</span></a>
+        <a href={link} className="card-link">Open Handleiding <span>→</span></a>
       </div>
     </div>
   );
