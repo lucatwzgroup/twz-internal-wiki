@@ -12,7 +12,7 @@ export const documents = [
       link: '#'
     },
     {
-      category: 'General',
+      category: 'Algemene',
       title: 'Company Onboarding Process',
       description: 'Step-by-step guide for new employee onboarding, including IT setup, account creation, and training resources.',
       link: '#'
@@ -54,19 +54,19 @@ export const documents = [
       link: '#'
     },
     {
-      category: 'General',
+      category: 'Algemene',
       title: 'IT Security Policy',
       description: 'Company security guidelines, password policies, data protection procedures, and security incident reporting.',
       link: '#'
     },
     {
-      category: 'General',
+      category: 'Algemene',
       title: 'Remote Work Guidelines',
       description: 'Policies and best practices for effective remote work, including communication tools and productivity tips.',
       link: '#'
     },
     {
-      category: 'General',
+      category: 'Algemene',
       title: 'Employee Benefits Handbook',
       description: 'Detailed information about company benefits, insurance coverage, retirement plans, and wellness programs.',
       link: '#'

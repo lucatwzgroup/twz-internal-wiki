@@ -5,7 +5,7 @@ function ViewAllButton({ category }) {
   return (
     <div className="section-footer">
       <Link to={`/all-documents?category=${category}`} className={`view-all-btn ${category.toLowerCase()}`}>
-        <span>View All {category} Documents</span>
+        <span>Bekijk alle {category} Handleidingen</span>
         <span className="arrow">→</span>
       </Link>
     </div>

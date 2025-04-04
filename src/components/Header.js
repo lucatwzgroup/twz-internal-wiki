@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import logoImage from '../data/logo.png'; // Adjust the path to your logo file
+
 
 function Header() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -44,14 +46,16 @@ function Header() {
     <header>
       <div className="container header-content">
         <div className="logo">
-          <div className="logo-icon">K</div>
-          <h1>Company Knowledge Base</h1>
+        <div className="logo-icon">
+  <img src={logoImage} alt="Logo" className="logo-image" />
+</div>
+          <h1>TWZ Wiki</h1>
         </div>
         <div className="search-bar">
           <span className="search-icon">🔍</span>
           <input 
             type="text" 
-            placeholder="Search documentation..." 
+            placeholder="Zoek naar handleidingen..." 
             value={searchQuery}
             onChange={handleSearchChange}
           />

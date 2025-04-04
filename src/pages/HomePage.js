@@ -21,7 +21,7 @@ function HomePage() {
   // Get documents by category
   const siriusDocuments = documents.filter(doc => doc.category === 'Sirius').slice(0, 3);
   const odooDocuments = documents.filter(doc => doc.category === 'Odoo').slice(0, 3);
-  const generalDocuments = documents.filter(doc => doc.category === 'General').slice(0, 3);
+  const generalDocuments = documents.filter(doc => doc.category === 'Algemene').slice(0, 3);
   
   return (
     <>
@@ -29,20 +29,20 @@ function HomePage() {
       <Hero />
       <main className="container">
         
-        <SectionTitle title="New Documents" />
+        <SectionTitle title="Nieuwe Handleidingen" />
         <DocumentGrid documents={newDocuments} />
         
-        <SectionTitle title="Sirius Documentation" />
+        <SectionTitle title="Sirius Handleidingen" />
         <DocumentGrid documents={siriusDocuments} />
         <ViewAllButton category="Sirius" />
         
-        <SectionTitle title="Odoo Documentation" />
+        <SectionTitle title="Odoo Handleidingen" />
         <DocumentGrid documents={odooDocuments} />
         <ViewAllButton category="Odoo" />
         
-        <SectionTitle title="General Documentation" />
+        <SectionTitle title="Algemene Handleidingen" />
         <DocumentGrid documents={generalDocuments} />
-        <ViewAllButton category="General" />
+        <ViewAllButton category="Algemene" />
       </main>
       <Footer />
     </>

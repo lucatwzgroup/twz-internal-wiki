@@ -4,8 +4,8 @@ function Hero() {
   return (
     <section className="hero">
       <div className="container">
-        <h2>Welcome to Our Internal Wiki</h2>
-        <p>Access all company documentation, manuals, and guides in one centralized location. Find what you need quickly and easily.</p>
+        <h2>Welkom Bij Onze Interne Wiki</h2>
+        <p>Krijg toegang tot alle bedrijfsdocumentatie, handleidingen en informatie op één centrale locatie. Vind snel en gemakkelijk wat u nodig hebt.</p>
       </div>
     </section>
   );
