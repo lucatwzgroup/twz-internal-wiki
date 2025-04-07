@@ -1,9 +1,9 @@
 export const documents = [
     {
-      category: 'Sirius',
-      title: 'Sirius User Administration Guide',
-      description: 'Complete guide for managing user accounts, permissions, and access controls in the Sirius platform.',
-      link: '#'
+      category: 'Algemene',
+      title: 'Printers hernoemen',
+      description: 'Deze handleiding beschrijft stapsgewijs hoe je de naam van een printer in Windows kunt veranderen via het Configuratiescherm.',
+      link: 'https://docs.google.com/document/d/1SJTKewaithMUq_v5wcCsDdMZJa0MREzBIC_z_ti8mvU/edit?tab=t.0'
     },
     {
       category: 'Odoo',
