@@ -37,39 +37,22 @@ export const documents = [
     },
     {
       category: 'Odoo',
-      title: 'Odoo CRM Best Practices',
-      description: 'Guidelines for managing customer relationships, tracking leads, and optimizing sales processes in Odoo.',
+      title: 'Plaatshouder tekst',
+      description: 'Dit is een plaatshouder tekst. Deze tekst dient alleen als voorbeeld en heeft geen betekenis.',
       link: '#'
     },
-    {
-      category: 'Odoo',
-      title: 'Odoo Accounting Manual',
-      description: 'Comprehensive guide to financial management, invoicing, payment processing, and reporting in Odoo.',
+     {
+      category: 'Sirius',
+      title: 'Plaatshouder tekst',
+      description: 'Dit is een plaatshouder tekst. Deze tekst dient alleen als voorbeeld en heeft geen betekenis.',
       link: '#'
     },
-    {
-      category: 'Odoo',
-      title: 'Odoo Manufacturing Module Guide',
-      description: 'Instructions for setting up production lines, managing bills of materials, and planning manufacturing orders.',
+     {
+      category: 'Sirius',
+      title: 'Plaatshouder tekst',
+      description: 'Dit is een plaatshouder tekst. Deze tekst dient alleen als voorbeeld en heeft geen betekenis.',
       link: '#'
     },
-    {
-      category: 'Algemene',
-      title: 'IT Security Policy',
-      description: 'Company security guidelines, password policies, data protection procedures, and security incident reporting.',
-      link: '#'
-    },
-    {
-      category: 'Algemene',
-      title: 'Remote Work Guidelines',
-      description: 'Policies and best practices for effective remote work, including communication tools and productivity tips.',
-      link: '#'
-    },
-    {
-      category: 'Algemene',
-      title: 'Employee Benefits Handbook',
-      description: 'Detailed information about company benefits, insurance coverage, retirement plans, and wellness programs.',
-      link: '#'
-    }
+   
   ];
   
