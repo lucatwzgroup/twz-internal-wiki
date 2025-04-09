@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import logoImage from '../data/logo.png'; // Adjust the path to your logo file
-
+import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
+import logoImage from '../data/logo.png';
 
 function Header() {
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
+  const { user, signOut } = useAuth();
   
-  // Extract search query from URL when component mounts or URL changes
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const searchParam = queryParams.get('search');
@@ -21,12 +21,9 @@ function Header() {
     const query = e.target.value;
     setSearchQuery(query);
     
-    // Debounce the navigation to avoid too many history entries
-    // and improve performance
     if (location.pathname !== '/all-documents') {
       navigate(`/all-documents?search=${encodeURIComponent(query)}`);
     } else {
-      // If already on the documents page, just update the search parameter
       const queryParams = new URLSearchParams(location.search);
       if (query.trim()) {
         queryParams.set('search', query);
@@ -34,21 +31,25 @@ function Header() {
         queryParams.delete('search');
       }
       
-      // Preserve other query parameters like category
       navigate({
         pathname: '/all-documents',
         search: queryParams.toString()
-      }, { replace: true }); // Use replace to avoid filling browser history
+      }, { replace: true });
     }
+  };
+
+  const handleLogout = async () => {
+    await signOut();
+    navigate('/');
   };
 
   return (
     <header>
       <div className="container header-content">
         <div className="logo">
-        <div className="logo-icon">
-  <img src={logoImage} alt="Logo" className="logo-image" />
-</div>
+          <div className="logo-icon">
+            <img src={logoImage} alt="Logo" className="logo-image" />
+          </div>
           <h1>TWZ Wiki</h1>
         </div>
         <div className="search-bar">
@@ -59,6 +60,16 @@ function Header() {
             value={searchQuery}
             onChange={handleSearchChange}
           />
+        </div>
+        <div className="auth-buttons">
+          {user ? (
+            <div className="user-menu">
+              <span className="user-email">{user.email}</span>
+              <button onClick={handleLogout} className="logout-button">Uitloggen</button>
+            </div>
+          ) : (
+            <Link to="/login" className="login-button">Inloggen</Link>
+          )}
         </div>
       </div>
     </header>

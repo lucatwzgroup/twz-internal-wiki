@@ -1,0 +1,135 @@
+/* LoginPage.css */
+.login-page {
+    background-color: white;
+    min-height: calc(100vh - 85px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: black;
+    padding: 20px;
+  }
+  
+  .login-container {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 40px;
+    width: 100%;
+    max-width: 450px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    text-align: center;
+  }
+  
+  .login-title {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    color: #4285f4;
+  }
+  
+  .login-subtitle {
+    margin-bottom: 30px;
+    font-size: 1rem;
+    opacity: 0.8;
+  }
+  
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .form-group {
+    text-align: left;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+  
+  .form-input {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: black;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+  
+  .form-input:focus {
+    outline: none;
+    border-color: #4285f4;
+    box-shadow: 0 0 0 2px rgba(97, 218, 251, 0.3);
+  }
+  
+  .login-button {
+    background-color: #61dafb;
+    color: #282c34;
+    border: none;
+    border-radius: 5px;
+    padding: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+    position: relative;
+  }
+  
+  .login-button:hover {
+    background-color: #4fa8d1;
+  }
+  
+  .login-button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+  
+  .loading-spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #282c34;
+    animation: spin 1s ease-in-out infinite;
+  }
+  
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  
+  .message-container {
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+  }
+  
+  .message-container.error {
+    background-color: rgba(255, 87, 87, 0.2);
+    border-left: 4px solid #ff5757;
+  }
+  
+  .message-container.success {
+    background-color: rgba(87, 255, 157, 0.2);
+    border-left: 4px solid #57ff9d;
+  }
+  
+  .message-text {
+    margin: 0;
+  }
+  
+  @media (max-width: 500px) {
+    .login-container {
+      padding: 30px 20px;
+    }
+  
+    .login-title {
+      font-size: 2rem;
+    }
+  }
