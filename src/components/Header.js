@@ -47,7 +47,7 @@ function Header() {
     <header>
       <div className="container header-content">
 
-      <Link to="/add-document" className="login-button">Inloggen</Link>
+      <Link to="/add-document" className="login-button">Document Toevoegen</Link>
 
 
       <Link to="/" className="logo-link">
@@ -74,6 +74,8 @@ function Header() {
               <span className="user-email">{user.email}</span>
               <button onClick={handleLogout} className="logout-button">Uitloggen</button>
             </div>
+
+            
           ) : (
             <Link to="/login" className="login-button">Inloggen</Link>
           )}
