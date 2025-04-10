@@ -4,10 +4,10 @@ import SectionTitle from '../components/SectionTitle';
 import DocumentGrid from '../components/DocumentGrid';
 import Footer from '../components/Footer';
 import { supabase } from '../data/supabaseClient';
+import { decrypt } from '../utils/encryption';
 import './Page.css';
 
-
-function AllDocumentsPage() {
+function DocumentsPage() {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const categoryParam = queryParams.get('category');
@@ -68,7 +68,19 @@ function AllDocumentsPage() {
         const { data, error } = await query;
         
         if (error) throw error;
-        setDocuments(data || []);
+        
+        // Decrypt the documents
+        const decryptDocuments = async (docs) => {
+          return Promise.all(docs.map(async (doc) => ({
+            ...doc,
+            title: await decrypt(doc.title),
+            description: await decrypt(doc.description),
+            link: await decrypt(doc.link)
+          })));
+        };
+        
+        const decryptedDocs = await decryptDocuments(data || []);
+        setDocuments(decryptedDocs);
       } catch (error) {
         console.error('Error fetching documents:', error);
       } finally {
@@ -130,4 +142,4 @@ function AllDocumentsPage() {
   );
 }
 
-export default AllDocumentsPage;
+export default DocumentsPage;

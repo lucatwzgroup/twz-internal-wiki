@@ -41,16 +41,16 @@ function LoginPage() {
   return (
     <div className="login-page">
       <div className="login-container">
-        <h1 className="login-title">Welcome Back</h1>
-        <p className="login-subtitle">Sign in to continue to your account</p>
+        <h1 className="login-title">Welcome Terug</h1>
+        <p className="login-subtitle">Log in om al uw handleingen te zien te krijgen. </p>
         
         <form onSubmit={handleLogin} className="login-form">
           <div className="form-group">
-            <label htmlFor="email">Email Address</label>
+            <label htmlFor="email">E-mail Adres</label>
             <input
               id="email"
               type="email"
-              placeholder="Enter your email"
+              placeholder="Vul uw e-mail in"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -59,11 +59,11 @@ function LoginPage() {
           </div>
           
           <div className="form-group">
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">Wachtwoord</label>
             <input
               id="password"
               type="password"
-              placeholder="Enter your password"
+              placeholder="Vul uw wachtwoord in"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required

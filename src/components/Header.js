@@ -21,8 +21,8 @@ function Header() {
     const query = e.target.value;
     setSearchQuery(query);
     
-    if (location.pathname !== '/all-documents') {
-      navigate(`/all-documents?search=${encodeURIComponent(query)}`);
+    if (location.pathname !== '/documents') {
+      navigate(`/documents?search=${encodeURIComponent(query)}`);
     } else {
       const queryParams = new URLSearchParams(location.search);
       if (query.trim()) {
@@ -32,7 +32,7 @@ function Header() {
       }
       
       navigate({
-        pathname: '/all-documents',
+        pathname: '/documents',
         search: queryParams.toString()
       }, { replace: true });
     }
@@ -46,12 +46,16 @@ function Header() {
   return (
     <header>
       <div className="container header-content">
+
+      <Link to="/" className="logo-link">
         <div className="logo">
           <div className="logo-icon">
             <img src={logoImage} alt="Logo" className="logo-image" />
           </div>
           <h1>TWZ Wiki</h1>
         </div>
+      
+      </Link>
         <div className="search-bar">
           <span className="search-icon">🔍</span>
           <input 

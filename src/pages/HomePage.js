@@ -5,16 +5,14 @@ import DocumentGrid from '../components/DocumentGrid';
 import ViewAllButton from '../components/ViewAllButton';
 import Footer from '../components/Footer';
 import { supabase } from '../data/supabaseClient';
+import { decrypt } from '../utils/encryption';
 import './Page.css';
-
-
 
 function HomePage() {
   const [documents, setDocuments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState([]);
   
-
   // Public categories that everyone can see
   const publicCategories = ['Sirius', 'Algemene', 'Odoo'];
 
@@ -57,7 +55,18 @@ function HomePage() {
 
         if (docsError) throw docsError;
 
-        setDocuments(docs);
+        // Decrypt the documents
+        const decryptDocuments = async (docs) => {
+          return Promise.all(docs.map(async (doc) => ({
+            ...doc,
+            title: await decrypt(doc.title),
+            description: await decrypt(doc.description),
+            link: await decrypt(doc.link)
+          })));
+        };
+        
+        const decryptedDocs = await decryptDocuments(docs || []);
+        setDocuments(decryptedDocs);
       } catch (error) {
         console.error('Error fetching documents:', error);
       } finally {
@@ -103,6 +112,7 @@ function HomePage() {
           );
         })}
       </main>
+      <Footer />
     </>
   );
 }
