@@ -47,6 +47,9 @@ function Header() {
     <header>
       <div className="container header-content">
 
+      <Link to="/add-document" className="login-button">Inloggen</Link>
+
+
       <Link to="/" className="logo-link">
         <div className="logo">
           <div className="logo-icon">
