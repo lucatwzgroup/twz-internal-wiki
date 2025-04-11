@@ -22,61 +22,62 @@ function DocumentsPage() {
   const publicCategories = ['Sirius', 'Algemene', 'Odoo'];
   
   // Fetch documents
-  useEffect(() => {
-    const fetchDocuments = async () => {
-      try {
-        let availableCategories = [...publicCategories];
+  const fetchDocuments = async () => {
+    try {
+      setLoading(true);
+      let availableCategories = [...publicCategories];
+      
+      // Try to get current user
+      const { data: userData } = await supabase.auth.getUser();
+      
+      // If user is logged in, fetch their assigned categories
+      if (userData && userData.user) {
+        const userId = userData.user.id;
         
-        // Try to get current user
-        const { data: userData } = await supabase.auth.getUser();
-        
-        // If user is logged in, fetch their assigned categories
-        if (userData && userData.user) {
-          const userId = userData.user.id;
-          
-          // Fetch user preferences/categories
-          const { data: preferences, error: prefError } = await supabase
-            .from('user_preferences')
-            .select('category')
-            .eq('user_id', userId);
+        // Fetch user preferences/categories
+        const { data: preferences, error: prefError } = await supabase
+          .from('user_preferences')
+          .select('category')
+          .eq('user_id', userId);
 
-          if (!prefError && preferences) {
-            const assignedCategories = preferences.map(pref => pref.category);
-            // Add user's assigned categories to available categories (avoiding duplicates)
-            assignedCategories.forEach(category => {
-              if (!availableCategories.includes(category)) {
-                availableCategories.push(category);
-              }
-            });
-          }
+        if (!prefError && preferences) {
+          const assignedCategories = preferences.map(pref => pref.category);
+          // Add user's assigned categories to available categories (avoiding duplicates)
+          assignedCategories.forEach(category => {
+            if (!availableCategories.includes(category)) {
+              availableCategories.push(category);
+            }
+          });
         }
-        
-        setUserCategories(availableCategories);
-        
-        // Build query for documents
-        let query = supabase.from('documents').select('*');
-        
-        // Filter by available categories
-        query = query.in('category', availableCategories);
-        
-        // Apply additional category filter if specified
-        if (categoryParam && categoryParam !== 'Alle Handleidingen') {
-          query = query.eq('category', categoryParam);
-        }
-        
-        const { data, error } = await query;
-        
-        if (error) throw error;
-        
-        // No need to decrypt, just use the data directly
-        setDocuments(data || []);
-      } catch (error) {
-        console.error('Error fetching documents:', error);
-      } finally {
-        setLoading(false);
       }
-    };
-    
+      
+      setUserCategories(availableCategories);
+      
+      // Build query for documents
+      let query = supabase.from('documents').select('*');
+      
+      // Filter by available categories
+      query = query.in('category', availableCategories);
+      
+      // Apply additional category filter if specified
+      if (categoryParam && categoryParam !== 'Alle Handleidingen') {
+        query = query.eq('category', categoryParam);
+      }
+      
+      const { data, error } = await query;
+      
+      if (error) throw error;
+      
+      // No need to decrypt, just use the data directly
+      setDocuments(data || []);
+    } catch (error) {
+      console.error('Error fetching documents:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  useEffect(() => {
     fetchDocuments();
   }, [categoryParam]);
   
@@ -104,6 +105,13 @@ function DocumentsPage() {
     }
   }, [documents, searchParam]);
   
+  // Handle document deletion
+  const handleDocumentDelete = (deletedId) => {
+    // Update both documents and searchResults arrays
+    setDocuments(prevDocs => prevDocs.filter(doc => doc.id !== deletedId));
+    setSearchResults(prevResults => prevResults.filter(doc => doc.id !== deletedId));
+  };
+  
   // Determine page title
   const pageTitle = searchParam && searchParam.trim() !== ''
     ? `Zoekresultaten voor "${searchParam}"` 
@@ -121,12 +129,15 @@ function DocumentsPage() {
         <SectionTitle title={pageTitle} />
         
         {searchResults.length > 0 ? (
-          <DocumentGrid documents={searchResults} />
+          <DocumentGrid 
+            documents={searchResults} 
+            onDocumentDelete={handleDocumentDelete} 
+          />
         ) : (
           <p>Geen handleidingen gevonden. Probeer een andere zoekterm of categorie.</p>
         )}
       </main>
-      <Footer></Footer>
+      <Footer />
     </>
   );
 }
