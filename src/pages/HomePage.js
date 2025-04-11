@@ -16,55 +16,60 @@ function HomePage() {
   const publicCategories = ['Sirius', 'Algemene', 'Odoo'];
 
   useEffect(() => {
-    const fetchDocuments = async () => {
-      try {
-        let availableCategories = [...publicCategories];
-        
-        // Try to get current user
-        const { data: userData } = await supabase.auth.getUser();
-        
-        // If user is logged in, fetch their assigned categories
-        if (userData && userData.user) {
-          const userId = userData.user.id;
-          
-          // Fetch user preferences/categories
-          const { data: preferences, error: prefError } = await supabase
-            .from('user_preferences')
-            .select('category')
-            .eq('user_id', userId);
-
-          if (!prefError && preferences) {
-            const assignedCategories = preferences.map(pref => pref.category);
-            // Add user's assigned categories to available categories (avoiding duplicates)
-            assignedCategories.forEach(category => {
-              if (!availableCategories.includes(category)) {
-                availableCategories.push(category);
-              }
-            });
-          }
-        }
-        
-        setCategories(availableCategories);
-
-        // Fetch documents based on available categories
-        const { data: docs, error: docsError } = await supabase
-          .from('documents')
-          .select('*')
-          .in('category', availableCategories);
-
-        if (docsError) throw docsError;
-
-        // No need to decrypt, just use the data directly
-        setDocuments(docs || []);
-      } catch (error) {
-        console.error('Error fetching documents:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchDocuments();
   }, []);
+
+  const fetchDocuments = async () => {
+    try {
+      setLoading(true);
+      let availableCategories = [...publicCategories];
+      
+      // Try to get current user
+      const { data: userData } = await supabase.auth.getUser();
+      
+      // If user is logged in, fetch their assigned categories
+      if (userData && userData.user) {
+        const userId = userData.user.id;
+        
+        // Fetch user preferences/categories
+        const { data: preferences, error: prefError } = await supabase
+          .from('user_preferences')
+          .select('category')
+          .eq('user_id', userId);
+
+        if (!prefError && preferences) {
+          const assignedCategories = preferences.map(pref => pref.category);
+          // Add user's assigned categories to available categories (avoiding duplicates)
+          assignedCategories.forEach(category => {
+            if (!availableCategories.includes(category)) {
+              availableCategories.push(category);
+            }
+          });
+        }
+      }
+      
+      setCategories(availableCategories);
+
+      // Fetch documents based on available categories
+      const { data: docs, error: docsError } = await supabase
+        .from('documents')
+        .select('*')
+        .in('category', availableCategories);
+
+      if (docsError) throw docsError;
+
+      setDocuments(docs || []);
+    } catch (error) {
+      console.error('Error fetching documents:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Function to handle document deletion
+  const handleDocumentDelete = (deletedId) => {
+    setDocuments(prevDocs => prevDocs.filter(doc => doc.id !== deletedId));
+  };
 
   // Function to get documents by category (limited to 3)
   const getDocumentsByCategory = (category) => {
@@ -86,7 +91,10 @@ function HomePage() {
       <Hero />
       <main className="container">
         <SectionTitle title="Nieuwe Handleidingen" />
-        <DocumentGrid documents={newDocuments} />
+        <DocumentGrid 
+          documents={newDocuments} 
+          onDocumentDelete={handleDocumentDelete} 
+        />
         
         {categories.map(category => {
           const categoryDocuments = getDocumentsByCategory(category);
@@ -95,7 +103,10 @@ function HomePage() {
           return (
             <div key={category}>
               <SectionTitle title={`${category} Handleidingen`} />
-              <DocumentGrid documents={categoryDocuments} />
+              <DocumentGrid 
+                documents={categoryDocuments} 
+                onDocumentDelete={handleDocumentDelete} 
+              />
               <ViewAllButton category={category} />
             </div>
           );

@@ -25,3 +25,55 @@
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
   }
+  .document-card {
+    position: relative;
+  }
+  
+  .delete-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+    padding: 0;
+  }
+  
+  .delete-button:hover {
+    background-color: rgba(255, 0, 0, 0.1);
+    transform: scale(1.1);
+  }
+  
+  .delete-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  .trash-icon {
+    width: 22px;
+    height: 22px;
+    color: #ff3b30;
+  }
+  
+  .deleting-spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 59, 48, 0.3);
+    border-radius: 50%;
+    border-top-color: #ff3b30;
+    animation: spin 1s ease-in-out infinite;
+  }
+  
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  

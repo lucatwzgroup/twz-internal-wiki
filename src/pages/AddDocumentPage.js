@@ -81,7 +81,13 @@ function AddDocumentPage() {
     }
     
     try {
-      // Store data without encryption
+      // Get current user
+      const { data: userData } = await supabase.auth.getUser();
+      if (!userData || !userData.user) {
+        throw new Error('You must be logged in to add a document');
+      }
+      
+      // Store data with user ID
       const { data, error } = await supabase
         .from('documents')
         .insert([
@@ -89,7 +95,8 @@ function AddDocumentPage() {
             category: formData.category,
             title: formData.title,
             description: formData.description,
-            link: formData.link
+            link: formData.link,
+            created_by: userData.user.id // Add the user ID
           }
         ]);
       
@@ -99,7 +106,7 @@ function AddDocumentPage() {
       setFormData({ title: '', description: '', link: '', category: formData.category });
     } catch (error) {
       console.error('Error adding document:', error);
-      setSubmitStatus({ success: false, message: 'Failed to add document. Please try again.' });
+      setSubmitStatus({ success: false, message: `Failed to add document: ${error.message}` });
     }
   };
   
@@ -182,10 +189,14 @@ function AddDocumentPage() {
             <button type="submit" className="btn btn-primary" disabled={loading}>
               Add Document
             </button>
+            
+            <Link to="/" className="btn btn-secondary" style={{ marginLeft: '10px' }}>
+              Cancel
+            </Link>
           </form>
         )}
       </main>
-      <Footer></Footer>
+      <Footer />
     </>
   );
 }

@@ -5,6 +5,7 @@ import logoImage from '../data/logo.png';
 
 function Header() {
   const [searchQuery, setSearchQuery] = useState('');
+  const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { user, signOut } = useAuth();
@@ -16,6 +17,20 @@ function Header() {
       setSearchQuery(searchParam);
     }
   }, [location.search]);
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuOpen && !event.target.closest('.user-menu-container')) {
+        setMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [menuOpen]);
 
   const handleSearchChange = (e) => {
     const query = e.target.value;
@@ -40,7 +55,12 @@ function Header() {
 
   const handleLogout = async () => {
     await signOut();
+    setMenuOpen(false);
     navigate('/');
+  };
+
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
   };
 
   return (
@@ -66,22 +86,31 @@ function Header() {
         </div>
         
         <div className="user-section">
-          {user && (
-            <Link to="/add-document" className="add-document-button">
-              Document Toevoegen
-            </Link>
+          {user ? (
+            <div className="user-menu-container">
+              <button onClick={toggleMenu} className="user-icon-button">
+                <div className="user-icon">
+                  {user.email.charAt(0).toUpperCase()}
+                </div>
+              </button>
+              {menuOpen && (
+                <div className="dropdown-menu">
+                  <div className="user-email">{user.email}</div>
+                  <Link to="/add-document" className="dropdown-item" onClick={() => setMenuOpen(false)}>
+                    Document Toevoegen
+                  </Link>
+                  <Link to="/reset-password" className="dropdown-item" onClick={() => setMenuOpen(false)}>
+                    Wachtwoord Resetten
+                  </Link>
+                  <button onClick={handleLogout} className="dropdown-item logout-item">
+                    Uitloggen
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <Link to="/login" className="login-button">Inloggen</Link>
           )}
-          
-          <div className="auth-buttons">
-            {user ? (
-              <div className="user-menu">
-                <span className="user-email">{user.email}</span>
-                <button onClick={handleLogout} className="logout-button">Uitloggen</button>
-              </div>
-            ) : (
-              <Link to="/login" className="login-button">Inloggen</Link>
-            )}
-          </div>
         </div>
       </div>
     </header>

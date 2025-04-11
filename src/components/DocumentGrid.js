@@ -1,11 +1,15 @@
 import React from 'react';
 import DocumentCard from './DocumentCard';
 
-function DocumentGrid({ documents }) {
+function DocumentGrid({ documents, onDocumentDelete }) {
   return (
     <div className="document-grid">
-      {documents.map((document, index) => (
-        <DocumentCard key={index} document={document} />
+      {documents.map((document) => (
+        <DocumentCard 
+          key={document.id} 
+          document={document} 
+          onDelete={onDocumentDelete} 
+        />
       ))}
     </div>
   );

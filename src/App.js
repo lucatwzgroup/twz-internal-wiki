@@ -10,6 +10,7 @@ import DocumentsPage from './pages/DocumentsPage';
 import LoginPage from './pages/LoginPage';
 import './styles.css';
 import AddDocumentPage from './pages/AddDocumentPage';
+import ResetPasswordPage from './pages/ResetPasswordPage';
 
 function App() {
   return (
@@ -33,6 +34,16 @@ function App() {
               </ProtectedRoute>
             } 
           />
+
+          <Route
+            path="/reset-password"
+            element={
+              <ProtectedRoute>
+                <ResetPasswordPage />
+              </ProtectedRoute>
+            }
+          />
+
         </Routes>
 
       </Router>

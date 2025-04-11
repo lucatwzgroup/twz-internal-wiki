@@ -117,11 +117,7 @@
     to { transform: rotate(360deg); }
   }
   
-  p {
-    text-align: center;
-    font-size: 1.1rem;
-    margin: 20px 0;
-  }
+
   
   @media (max-width: 600px) {
     .document-form {
