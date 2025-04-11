@@ -34,6 +34,7 @@ body {
 }
 
 /* Header Styles */
+/* Header Styles */
 header {
     background-color: var(--primary-color);
     color: white;
@@ -53,52 +54,10 @@ header {
     width: 100%;
 }
 
-.auth-buttons {
-    margin-left: 20px;
-}
-
 .logo-link {
     color: white;
     text-decoration: none;
-
-}
-
-.login-button {
-    padding: 8px 16px;
-    background-color: #4285f4;
-    color: white;
-    border-radius: 4px;
-    text-decoration: none;
-    font-weight: 500;
-    transition: var(--transition);
-}
-
-.login-button:hover {
-    background-color: #3367d6;
-}
-
-.user-menu {
-    display: flex;
-    align-items: center;
-}
-
-.user-email {
-    margin-right: 10px;
-    font-size: 14px;
-}
-
-.logout-button {
-    padding: 6px 12px;
-    background-color: #f44336;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: var(--transition);
-}
-
-.logout-button:hover {
-    background-color: #d32f2f;
+    margin-right: 20px;
 }
 
 .logo {
@@ -130,6 +89,9 @@ header {
 .search-bar {
     position: relative;
     width: 300px;
+    flex-grow: 1;
+    max-width: 500px;
+    margin: 0 20px;
 }
 
 .search-bar input {
@@ -159,6 +121,95 @@ header {
     transform: translateY(-50%);
     color: rgba(255, 255, 255, 0.7);
 }
+
+.user-section {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.auth-buttons {
+    display: flex;
+    align-items: center;
+}
+
+.login-button, .add-document-button {
+    padding: 8px 16px;
+    background-color: #4285f4;
+    color: white;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: var(--transition);
+    white-space: nowrap;
+}
+
+.add-document-button {
+    background-color: #34a853;
+}
+
+.add-document-button:hover {
+    background-color: #2d9249;
+}
+
+.login-button:hover {
+    background-color: #3367d6;
+}
+
+.user-menu {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user-email {
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
+}
+
+.logout-button {
+    padding: 6px 12px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: var(--transition);
+    white-space: nowrap;
+}
+
+.logout-button:hover {
+    background-color: #d32f2f;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .user-email {
+        max-width: 100px;
+    }
+    
+    .search-bar {
+        width: 200px;
+    }
+}
+
+@media (max-width: 576px) {
+    .logo h1 {
+        display: none;
+    }
+    
+    .user-email {
+        display: none;
+    }
+    
+    .search-bar {
+        width: 150px;
+    }
+}
+
 
 /* Hero Section */
 .hero {

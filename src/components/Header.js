@@ -46,19 +46,15 @@ function Header() {
   return (
     <header>
       <div className="container header-content">
-
-      <Link to="/add-document" className="login-button">Document Toevoegen</Link>
-
-
-      <Link to="/" className="logo-link">
-        <div className="logo">
-          <div className="logo-icon">
-            <img src={logoImage} alt="Logo" className="logo-image" />
+        <Link to="/" className="logo-link">
+          <div className="logo">
+            <div className="logo-icon">
+              <img src={logoImage} alt="Logo" className="logo-image" />
+            </div>
+            <h1>TWZ Wiki</h1>
           </div>
-          <h1>TWZ Wiki</h1>
-        </div>
-      
-      </Link>
+        </Link>
+        
         <div className="search-bar">
           <span className="search-icon">🔍</span>
           <input 
@@ -68,17 +64,24 @@ function Header() {
             onChange={handleSearchChange}
           />
         </div>
-        <div className="auth-buttons">
-          {user ? (
-            <div className="user-menu">
-              <span className="user-email">{user.email}</span>
-              <button onClick={handleLogout} className="logout-button">Uitloggen</button>
-            </div>
-
-            
-          ) : (
-            <Link to="/login" className="login-button">Inloggen</Link>
+        
+        <div className="user-section">
+          {user && (
+            <Link to="/add-document" className="add-document-button">
+              Document Toevoegen
+            </Link>
           )}
+          
+          <div className="auth-buttons">
+            {user ? (
+              <div className="user-menu">
+                <span className="user-email">{user.email}</span>
+                <button onClick={handleLogout} className="logout-button">Uitloggen</button>
+              </div>
+            ) : (
+              <Link to="/login" className="login-button">Inloggen</Link>
+            )}
+          </div>
         </div>
       </div>
     </header>

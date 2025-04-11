@@ -4,7 +4,6 @@ import SectionTitle from '../components/SectionTitle';
 import DocumentGrid from '../components/DocumentGrid';
 import Footer from '../components/Footer';
 import { supabase } from '../data/supabaseClient';
-import { decrypt } from '../utils/encryption';
 import './Page.css';
 
 function DocumentsPage() {
@@ -69,18 +68,8 @@ function DocumentsPage() {
         
         if (error) throw error;
         
-        // Decrypt the documents
-        const decryptDocuments = async (docs) => {
-          return Promise.all(docs.map(async (doc) => ({
-            ...doc,
-            title: await decrypt(doc.title),
-            description: await decrypt(doc.description),
-            link: await decrypt(doc.link)
-          })));
-        };
-        
-        const decryptedDocs = await decryptDocuments(data || []);
-        setDocuments(decryptedDocs);
+        // No need to decrypt, just use the data directly
+        setDocuments(data || []);
       } catch (error) {
         console.error('Error fetching documents:', error);
       } finally {

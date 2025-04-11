@@ -2,10 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import Footer from '../components/Footer';
 import { supabase } from '../data/supabaseClient';
-import { encrypt } from '../utils/encryption';
 import './Page.css';
 import './AddDocumentPage.css';
-
 
 function AddDocumentPage() {
   const location = useLocation();
@@ -83,19 +81,15 @@ function AddDocumentPage() {
     }
     
     try {
-      // Encrypt sensitive data
-      const encryptedTitle = await encrypt(formData.title);
-      const encryptedDescription = await encrypt(formData.description);
-      const encryptedLink = await encrypt(formData.link);
-      
+      // Store data without encryption
       const { data, error } = await supabase
         .from('documents')
         .insert([
           {
             category: formData.category,
-            title: encryptedTitle,
-            description: encryptedDescription,
-            link: encryptedLink
+            title: formData.title,
+            description: formData.description,
+            link: formData.link
           }
         ]);
       
@@ -188,8 +182,6 @@ function AddDocumentPage() {
             <button type="submit" className="btn btn-primary" disabled={loading}>
               Add Document
             </button>
-            
-         
           </form>
         )}
       </main>
