@@ -1,3 +1,4 @@
+// DocumentsPage.jsx
 import React, { useState, useEffect } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import SectionTitle from '../components/SectionTitle';
@@ -17,15 +18,34 @@ function DocumentsPage() {
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(true);
   const [userCategories, setUserCategories] = useState([]);
+  const [categoryNames, setCategoryNames] = useState({});
   
-  // Public categories that everyone can see
-  const publicCategories = ['Sirius', 'Algemene', 'Odoo'];
+  // Public categories UUIDs that everyone can see
+  const publicCategoryIds = [
+    '5190c85c-42c4-412d-b604-1bf916b02427', // Sirius
+    'bbc0fda0-f4c4-4b4d-ad3c-edc682a9a2d4', // Algemene
+    'd0cf4c17-ad05-4276-9ffa-e9a35d467074'  // Odoo
+  ];
   
   // Fetch documents
   const fetchDocuments = async () => {
     try {
       setLoading(true);
-      let availableCategories = [...publicCategories];
+      let availableCategoryIds = [...publicCategoryIds];
+      
+      // Fetch all categories to get their names
+      const { data: allCategories, error: catError } = await supabase
+        .from('categories')
+        .select('id, name');
+      
+      if (catError) throw catError;
+      
+      // Create a mapping of category IDs to names
+      const categoryMapping = {};
+      allCategories.forEach(cat => {
+        categoryMapping[cat.id] = cat.name;
+      });
+      setCategoryNames(categoryMapping);
       
       // Try to get current user
       const { data: userData } = await supabase.auth.getUser();
@@ -41,23 +61,23 @@ function DocumentsPage() {
           .eq('user_id', userId);
 
         if (!prefError && preferences) {
-          const assignedCategories = preferences.map(pref => pref.category);
+          const assignedCategoryIds = preferences.map(pref => pref.category);
           // Add user's assigned categories to available categories (avoiding duplicates)
-          assignedCategories.forEach(category => {
-            if (!availableCategories.includes(category)) {
-              availableCategories.push(category);
+          assignedCategoryIds.forEach(categoryId => {
+            if (!availableCategoryIds.includes(categoryId)) {
+              availableCategoryIds.push(categoryId);
             }
           });
         }
       }
       
-      setUserCategories(availableCategories);
+      setUserCategories(availableCategoryIds);
       
-      // Build query for documents
-      let query = supabase.from('documents').select('*');
+      // Build query for documents with category names included
+      let query = supabase.from('documents').select('*, categories:category(name)');
       
       // Filter by available categories
-      query = query.in('category', availableCategories);
+      query = query.in('category', availableCategoryIds);
       
       // Apply additional category filter if specified
       if (categoryParam && categoryParam !== 'Alle Handleidingen') {
@@ -68,8 +88,13 @@ function DocumentsPage() {
       
       if (error) throw error;
       
-      // No need to decrypt, just use the data directly
-      setDocuments(data || []);
+      // Enhance documents with category names
+      const enhancedDocs = data.map(doc => ({
+        ...doc,
+        categoryName: doc.categories?.name || categoryMapping[doc.category] || 'Unknown'
+      }));
+      
+      setDocuments(enhancedDocs || []);
     } catch (error) {
       console.error('Error fetching documents:', error);
     } finally {
@@ -84,11 +109,16 @@ function DocumentsPage() {
   // Update active category when URL parameter changes
   useEffect(() => {
     if (categoryParam) {
-      setActiveCategory(categoryParam);
+      // If categoryParam is a UUID, try to get its name
+      if (categoryNames[categoryParam]) {
+        setActiveCategory(categoryNames[categoryParam]);
+      } else {
+        setActiveCategory(categoryParam);
+      }
     } else if (!searchParam) {
       setActiveCategory('Alle Handleidingen');
     }
-  }, [categoryParam, searchParam]);
+  }, [categoryParam, searchParam, categoryNames]);
   
   // Filter documents based on search query
   useEffect(() => {
@@ -97,7 +127,7 @@ function DocumentsPage() {
       const filtered = documents.filter(doc => 
         doc.title.toLowerCase().includes(query) || 
         doc.description.toLowerCase().includes(query) ||
-        doc.category.toLowerCase().includes(query)
+        (doc.categoryName && doc.categoryName.toLowerCase().includes(query))
       );
       setSearchResults(filtered);
     } else {
@@ -117,7 +147,12 @@ function DocumentsPage() {
     ? `Zoekresultaten voor "${searchParam}"` 
     : `${activeCategory === 'Alle Handleidingen' ? 'Alle' : activeCategory} Handleidingen`;
   
-  if (loading) return <div className="loading">Loading...</div>;
+    if (loading) return (
+      <div className="loading-container">
+        <div className="loading-spinner"></div>
+        <p>Documenten laden...</p>
+      </div>
+    );
   
   return (
     <>

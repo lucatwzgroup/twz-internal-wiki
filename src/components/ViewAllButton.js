@@ -1,11 +1,15 @@
+// ViewAllButton.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-function ViewAllButton({ category }) {
+function ViewAllButton({ category, categoryName }) {
+  // Use the lowercase category name for styling
+  const categoryClass = categoryName ? categoryName.toLowerCase() : '';
+  
   return (
     <div className="section-footer">
-      <Link to={`/documents?category=${category}`} className={`view-all-btn ${category.toLowerCase()}`}>
-        <span>Bekijk alle {category} Handleidingen</span>
+      <Link to={`/documents?category=${category}`} className={`view-all-btn ${categoryClass}`}>
+        <span>Bekijk alle {categoryName} Handleidingen</span>
         <span className="arrow">→</span>
       </Link>
     </div>

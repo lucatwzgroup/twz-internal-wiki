@@ -20,9 +20,9 @@ function AddDocumentPage() {
   });
   const [submitStatus, setSubmitStatus] = useState({ success: false, message: '' });
   
-  // Fetch documents
+  // Fetch categories
   useEffect(() => {
-    const fetchDocuments = async () => {
+    const fetchCategories = async () => {
       try {
         // Try to get current user
         const { data: userData } = await supabase.auth.getUser();
@@ -31,33 +31,43 @@ function AddDocumentPage() {
         if (userData && userData.user) {
           const userId = userData.user.id;
           
-          // Fetch user preferences/categories
+          // Fetch user preferences/categories with category names
           const { data: preferences, error: prefError } = await supabase
             .from('user_preferences')
-            .select('category')
+            .select('category, categories(id, name)')
             .eq('user_id', userId);
 
           if (!prefError && preferences) {
-            const assignedCategories = preferences.map(pref => pref.category);
+            // Extract category objects with id and name
+            const assignedCategories = preferences.map(pref => ({
+              id: pref.category,
+              name: pref.categories?.name || 'Unknown'
+            }));
+            
             setUserCategories(assignedCategories);
             
             // Set default category if categoryParam exists and is in user categories
-            if (categoryParam && assignedCategories.includes(categoryParam)) {
-              setFormData(prev => ({ ...prev, category: categoryParam }));
+            if (categoryParam) {
+              const foundCategory = assignedCategories.find(cat => cat.id === categoryParam);
+              if (foundCategory) {
+                setFormData(prev => ({ ...prev, category: foundCategory.id }));
+              } else if (assignedCategories.length > 0) {
+                setFormData(prev => ({ ...prev, category: assignedCategories[0].id }));
+              }
             } else if (assignedCategories.length > 0) {
-              setFormData(prev => ({ ...prev, category: assignedCategories[0] }));
+              setFormData(prev => ({ ...prev, category: assignedCategories[0].id }));
             }
           }
         }
                 
       } catch (error) {
-        console.error('Error fetching categories:', error);
+        console.error('Fout bij het ophalen van categorieën:', error);
       } finally {
         setLoading(false);
       }
     };
     
-    fetchDocuments();
+    fetchCategories();
   }, [categoryParam]);
   
   const handleChange = (e) => {
@@ -69,14 +79,14 @@ function AddDocumentPage() {
     e.preventDefault();
     
     if (!formData.title || !formData.description || !formData.link || !formData.category) {
-      setSubmitStatus({ success: false, message: 'Please fill in all fields' });
+      setSubmitStatus({ success: false, message: 'Vul alle velden in' });
       return;
     }
     
     // Check if description is under 30 words
     const wordCount = formData.description.trim().split(/\s+/).length;
     if (wordCount > 30) {
-      setSubmitStatus({ success: false, message: 'Description must be 30 words or less' });
+      setSubmitStatus({ success: false, message: 'De beschrijving moet 30 woorden of minder zijn' });
       return;
     }
     
@@ -84,7 +94,7 @@ function AddDocumentPage() {
       // Get current user
       const { data: userData } = await supabase.auth.getUser();
       if (!userData || !userData.user) {
-        throw new Error('You must be logged in to add a document');
+        throw new Error('U moet ingelogd zijn om een document toe te voegen');
       }
       
       // Store data with user ID
@@ -92,7 +102,7 @@ function AddDocumentPage() {
         .from('documents')
         .insert([
           {
-            category: formData.category,
+            category: formData.category, // This is now a UUID
             title: formData.title,
             description: formData.description,
             link: formData.link,
@@ -102,25 +112,25 @@ function AddDocumentPage() {
       
       if (error) throw error;
       
-      setSubmitStatus({ success: true, message: 'Document added successfully!' });
+      setSubmitStatus({ success: true, message: 'Document succesvol toegevoegd!' });
       setFormData({ title: '', description: '', link: '', category: formData.category });
     } catch (error) {
-      console.error('Error adding document:', error);
-      setSubmitStatus({ success: false, message: `Failed to add document: ${error.message}` });
+      console.error('Fout bij toevoegen document:', error);
+      setSubmitStatus({ success: false, message: `Document niet toegevoegd: ${error.message}` });
     }
   };
   
   return (
     <>
       <main className="form-container" style={{ marginTop: '40px' }}>
-        <h1 className="form-title">Add New Document</h1>
+        <h1 className="form-title">Nieuw document toevoegen</h1>
         
         {loading ? (
-          <p>Loading...</p>
+          <div className="loading">Laden...</div>
         ) : (
           <form onSubmit={handleSubmit} className="document-form">
             <div className="form-group">
-              <label htmlFor="title">Document Title:</label>
+              <label htmlFor="title">Document Titel:</label>
               <input
                 type="text"
                 id="title"
@@ -133,7 +143,7 @@ function AddDocumentPage() {
             </div>
             
             <div className="form-group">
-              <label htmlFor="description">Description (max 30 words):</label>
+              <label htmlFor="description">Beschrijving (max 30 woorden):</label>
               <textarea
                 id="description"
                 name="description"
@@ -144,7 +154,7 @@ function AddDocumentPage() {
                 required
               ></textarea>
               <small>
-                Word count: {formData.description.trim() ? formData.description.trim().split(/\s+/).length : 0}/30
+              Aantal woorden: {formData.description.trim() ? formData.description.trim().split(/\s+/).length : 0}/30
               </small>
             </div>
             
@@ -162,7 +172,7 @@ function AddDocumentPage() {
             </div>
             
             <div className="form-group">
-              <label htmlFor="category">Category:</label>
+              <label htmlFor="category">Categorie:</label>
               <select
                 id="category"
                 name="category"
@@ -171,10 +181,10 @@ function AddDocumentPage() {
                 className="form-control"
                 required
               >
-                <option value="">Select a category</option>
+                <option value="">Selecteer een categorie</option>
                 {userCategories.map((category) => (
-                  <option key={category} value={category}>
-                    {category}
+                  <option key={category.id} value={category.id}>
+                    {category.name}
                   </option>
                 ))}
               </select>
@@ -187,11 +197,11 @@ function AddDocumentPage() {
             )}
             
             <button type="submit" className="btn btn-primary" disabled={loading}>
-              Add Document
+            Document toevoegen
             </button>
             
             <Link to="/" className="btn btn-secondary" style={{ marginLeft: '10px' }}>
-              Cancel
+            Annuleren
             </Link>
           </form>
         )}

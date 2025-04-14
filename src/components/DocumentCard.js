@@ -1,43 +1,48 @@
+// DocumentCard.jsx
 import React, { useState } from 'react';
 import { supabase } from '../data/supabaseClient';
-import { useAuth } from '../contexts/AuthContext'; // Import your auth context
+import { useAuth } from '../contexts/AuthContext';
 
 function DocumentCard({ document, onDelete }) {
-  const { category, title, description, link, id, created_by } = document;
-  const { user } = useAuth(); // Get current user from auth context
+  const { category: categoryId, title, description, link, id, created_by, categories, categoryName } = document;
+  const { user } = useAuth();
   const [isDeleting, setIsDeleting] = useState(false);
   
-  // Check if the current user created this document
+  // Use the category name directly from the document object
+  // First try categoryName (from DocumentsPage), then categories.name (from HomePage), then fallback
+  const displayCategory = categoryName || (categories && categories.name) || 'Unknown';
+  
+  // Use the lowercase category name for styling
+  const categoryClass = displayCategory.toLowerCase();
+  
   const isOwner = user && created_by === user.id;
   
   const handleDelete = async (e) => {
-    e.preventDefault(); // Prevent opening the link
-    e.stopPropagation(); // Prevent event bubbling
+    e.preventDefault();
+    e.stopPropagation();
     
-      setIsDeleting(true);
-      
-      try {
-        const { error } = await supabase
-          .from('documents')
-          .delete()
-          .eq('id', id);
-          
-        if (error) throw error;
+    setIsDeleting(true);
+    
+    try {
+      const { error } = await supabase
+        .from('documents')
+        .delete()
+        .eq('id', id);
         
-        // Call the onDelete callback to update the UI
-        if (onDelete) onDelete(id);
-      } catch (error) {
-        console.error('Error deleting document:', error);
-        alert('Failed to delete document');
-      } finally {
-        setIsDeleting(false);
-      }
-    
+      if (error) throw error;
+      
+      if (onDelete) onDelete(id);
+    } catch (error) {
+      console.error('Error deleting document:', error);
+      alert('Failed to delete document');
+    } finally {
+      setIsDeleting(false);
+    }
   };
   
   return (
     <div className="document-card">
-      <div className={`card-header ${category.toLowerCase()}`}>
+      <div className={`card-header ${categoryClass}`}>
         {isOwner && (
           <button 
             className="delete-button" 
@@ -56,7 +61,7 @@ function DocumentCard({ document, onDelete }) {
         )}
       </div>
       <div className="card-body">
-        <span className={`card-category ${category.toLowerCase()}`}>{category}</span>
+        <span className={`card-category ${categoryClass}`}>{displayCategory}</span>
         <h3>{title}</h3>
         <p>{description}</p>
         <a href={link} className="card-link" target="_blank" rel="noopener noreferrer">Open Handleiding <span>→</span></a>

@@ -41,12 +41,12 @@ function LoginPage() {
   return (
     <div className="login-page">
       <div className="login-container">
-        <h1 className="login-title">Welcome Terug</h1>
+        <h1 className="login-title">Welkom Terug</h1>
         <p className="login-subtitle">Log in om al uw handleingen te zien te krijgen. </p>
         
         <form onSubmit={handleLogin} className="login-form">
           <div className="form-group">
-            <label htmlFor="email">E-mail Adres</label>
+            <label htmlFor="email">E-mailadres</label>
             <input
               id="email"
               type="email"
