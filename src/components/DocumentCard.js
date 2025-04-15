@@ -1,4 +1,3 @@
-// DocumentCard.jsx
 import React, { useState } from 'react';
 import { supabase } from '../data/supabaseClient';
 import { useAuth } from '../contexts/AuthContext';
@@ -12,8 +11,9 @@ function DocumentCard({ document, onDelete }) {
   // First try categoryName (from DocumentsPage), then categories.name (from HomePage), then fallback
   const displayCategory = categoryName || (categories && categories.name) || 'Unknown';
   
-  // Use the lowercase category name for styling
-  const categoryClass = displayCategory.toLowerCase();
+  // Use the lowercase category name for styling and replace spaces, '/' and '&' with '-'
+  const categoryClass = displayCategory.toLowerCase().replace(/[\s\/&]/g, '-');
+  console.log(categoryClass);
   
   const isOwner = user && created_by === user.id;
   

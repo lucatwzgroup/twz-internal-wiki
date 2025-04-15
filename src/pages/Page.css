@@ -107,3 +107,24 @@
   animation: spin 1s linear infinite;
   margin-bottom: 15px;
 }
+
+/* Add to Page.css */
+.loading-more {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 0;
+}
+
+.loading-more .loading-spinner {
+  width: 30px;
+  height: 30px;
+  border-width: 3px;
+}
+
+.no-more-documents {
+  text-align: center;
+  color: #666;
+  margin: 20px 0;
+}
