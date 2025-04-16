@@ -15,9 +15,7 @@ function HomePage() {
   
   // Public category IDs that everyone can see (using your UUIDs)
   const publicCategoryIds = [
-    '5190c85c-42c4-412d-b604-1bf916b02427', // Sirius
     'bbc0fda0-f4c4-4b4d-ad3c-edc682a9a2d4', // Algemene
-    'd0cf4c17-ad05-4276-9ffa-e9a35d467074'  // Odoo
   ];
 
   useEffect(() => {
