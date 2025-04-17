@@ -424,6 +424,9 @@ header {
 .card-header.administratie {
     background: #353E43;
 }
+.card-header.it {
+    background: #79512a;
+}
 
 
 .card-body {
@@ -470,6 +473,10 @@ header {
 .card-category.administratie {
     background-color: rgba(53,62,67, 0.15);
     color: #353E43;
+}
+.card-category.it {
+    background-color: rgba(121,81,42, 0.15);
+    color: #79512a;
 }
 
 .document-card h3 {
@@ -585,6 +592,10 @@ header {
 }
 .view-all-btn.administratie {
     background-color: #353E43;
+    color: white;
+}
+.view-all-btn.it {
+    background-color: #79512a;
     color: white;
 }
 
