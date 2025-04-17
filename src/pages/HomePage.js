@@ -122,7 +122,7 @@ function HomePage() {
     <>
       <Hero />
       <main className="container">
-        <SectionTitle title="Nieuwe Handleidingen" />
+        <SectionTitle title="Nieuwe handleidingen" />
         <DocumentGrid 
           documents={newDocuments} 
           onDocumentDelete={handleDocumentDelete} 
@@ -134,7 +134,7 @@ function HomePage() {
           
           return (
             <div key={category.id}>
-              <SectionTitle title={`${category.name} Handleidingen`} />
+              <SectionTitle title={`${category.name} handleidingen`} />
               <DocumentGrid 
                 documents={categoryDocuments} 
                 onDocumentDelete={handleDocumentDelete} 

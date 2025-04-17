@@ -9,7 +9,7 @@ function ViewAllButton({ category, categoryName }) {
   return (
     <div className="section-footer">
       <Link to={`/documents?category=${category}`} className={`view-all-btn ${categoryClass}`}>
-        <span>Bekijk alle {categoryName} Handleidingen</span>
+        <span>Bekijk alle {categoryName} handleidingen</span>
         <span className="arrow">→</span>
       </Link>
     </div>

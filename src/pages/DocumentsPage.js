@@ -13,7 +13,7 @@ function DocumentsPage() {
   const categoryParam = queryParams.get('category');
   const searchParam = queryParams.get('search');
   
-  const [activeCategory, setActiveCategory] = useState(categoryParam || 'Alle Handleidingen');
+  const [activeCategory, setActiveCategory] = useState(categoryParam || 'Alle handleidingen');
   const [documents, setDocuments] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -22,9 +22,7 @@ function DocumentsPage() {
   
   // Public categories UUIDs that everyone can see
   const publicCategoryIds = [
-    '5190c85c-42c4-412d-b604-1bf916b02427', // Sirius
     'bbc0fda0-f4c4-4b4d-ad3c-edc682a9a2d4', // Algemene
-    'd0cf4c17-ad05-4276-9ffa-e9a35d467074'  // Odoo
   ];
   
   // Fetch documents
@@ -80,7 +78,7 @@ function DocumentsPage() {
       query = query.in('category', availableCategoryIds);
       
       // Apply additional category filter if specified
-      if (categoryParam && categoryParam !== 'Alle Handleidingen') {
+      if (categoryParam && categoryParam !== 'Alle handleidingen') {
         query = query.eq('category', categoryParam);
       }
       
@@ -116,7 +114,7 @@ function DocumentsPage() {
         setActiveCategory(categoryParam);
       }
     } else if (!searchParam) {
-      setActiveCategory('Alle Handleidingen');
+      setActiveCategory('Alle handleidingen');
     }
   }, [categoryParam, searchParam, categoryNames]);
   
@@ -145,7 +143,7 @@ function DocumentsPage() {
   // Determine page title
   const pageTitle = searchParam && searchParam.trim() !== ''
     ? `Zoekresultaten voor "${searchParam}"` 
-    : `${activeCategory === 'Alle Handleidingen' ? 'Alle' : activeCategory} Handleidingen`;
+    : `${activeCategory === 'Alle handleidingen' ? 'Alle' : activeCategory} handleidingen`;
   
     if (loading) return (
       <div className="loading-container">
