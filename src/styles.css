@@ -427,6 +427,12 @@ header {
 .card-header.it {
     background: #79512a;
 }
+.card-header.planning {
+    background: #E86100;
+}
+.card-header.facturatie {
+    background: #5d6658;
+}
 
 
 .card-body {
@@ -477,6 +483,14 @@ header {
 .card-category.it {
     background-color: rgba(121,81,42, 0.15);
     color: #79512a;
+}
+.card-category.planning {
+    background-color: rgba(232,97,0, 0.15);
+    color: #E86100;
+}
+.card-category.facturatie {
+    background-color: rgba(93,102,88, 0.15);
+    color: #5d6658;
 }
 
 .document-card h3 {
@@ -596,6 +610,14 @@ header {
 }
 .view-all-btn.it {
     background-color: #79512a;
+    color: white;
+}
+.view-all-btn.planning {
+    background-color: #E86100;
+    color: white;
+}
+.view-all-btn.facturatie {
+    background-color: #5d6658;
     color: white;
 }
 
