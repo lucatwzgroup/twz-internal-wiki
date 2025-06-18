@@ -16,12 +16,28 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
         run: |
-          response=$(curl -s \
-            -X GET "${SUPABASE_URL}/rest/v1/" \
+          # Debug information (safely)
+          echo "Testing connection to Supabase"
+          echo "URL starts with: ${SUPABASE_URL:0:15}..."
+          
+          # Perform the request with verbose output and proper error handling
+          response=$(curl -s -v --fail \
+            "${SUPABASE_URL}/rest/v1/" \
             -H "apikey: ${SUPABASE_SERVICE_ROLE_KEY}" \
-            -H "Authorization: Bearer ${SUPABASE_SERVICE_ROLE_KEY}")
+            -H "Authorization: Bearer ${SUPABASE_SERVICE_ROLE_KEY}" 2>&1)
+          
+          # Check curl exit status
+          status=$?
+          if [ $status -ne 0 ]; then
+            echo "Error: curl failed with status $status"
+            echo "Response: $response"
+            exit 1
+          fi
+          
+          # Check for empty response
           if [ -z "$response" ]; then
             echo "Error: empty response when pinging." >&2
             exit 1
           fi
+          
           echo "Successful ping: $response"
